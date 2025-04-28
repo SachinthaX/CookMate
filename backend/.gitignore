@@ -31,3 +31,27 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### OS / System files ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log
+
+### Environment / Property Files ###
+src/main/resources/application.properties
+src/main/resources/application.yml
+
+### Backup / Temp Files ###
+*.swp
+*~
+*.bak
+*.tmp
+*.temp
+
+### Maven Wrapper Additional ###
+.mvn/wrapper/maven-wrapper.properties
+
+### Others ###
+dependency-reduced-pom.xml

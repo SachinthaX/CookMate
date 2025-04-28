@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
-function App() {
-  const [count, setCount] = useState(0)
+import Navbar from './components/Navbar';
+import PrivateRoute from './components/PrivateRoute';
+
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Profile from './pages/Profile';
+import OAuthSuccess from './pages/OAuthSuccess';
+import Home from './pages/Home';
+
+function AppRoutes() {
+  const { user } = useAuth();
+  const location = useLocation();
+
+  // Hide navbar on login and register pages
+  const hideNavbar = location.pathname === '/login' || location.pathname === '/register';
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {!hideNavbar && user && <Navbar />}
+
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/oauth2/success" element={<OAuthSuccess />} />
+
+        <Route path="/home" element={
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>
+        } />
+
+        <Route path="/profile" element={
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        } />
+
+        {/* Fallback: unknown routes redirect to login */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
+  );
+}
+
+export default App;
