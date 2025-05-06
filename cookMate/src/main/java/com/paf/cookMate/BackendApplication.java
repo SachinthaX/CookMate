@@ -1,4 +1,4 @@
-package com.cookmate.backend;
+package com.paf.cookMate;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
