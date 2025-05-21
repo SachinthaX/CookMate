@@ -21,30 +21,57 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
                parameter.getParameterType().equals(String.class);
     }
 
-    @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                 NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    // @Override
+    // public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+    //                              NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         
-        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+    //     HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         
-        if (request != null) {
-            Object userId = request.getAttribute("userId");
-            if (userId != null) {
-                return userId.toString();
-            }
+    //     if (request != null) {
+    //         Object userId = request.getAttribute("userId");
+    //         if (userId != null) {
+    //             return userId.toString();
+    //         }
             
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                Optional<Cookie> userIdCookie = Arrays.stream(cookies)
-                        .filter(cookie -> "userId".equals(cookie.getName()))
-                        .findFirst();
+    //         Cookie[] cookies = request.getCookies();
+    //         if (cookies != null) {
+    //             Optional<Cookie> userIdCookie = Arrays.stream(cookies)
+    //                     .filter(cookie -> "userId".equals(cookie.getName()))
+    //                     .findFirst();
                 
-                if (userIdCookie.isPresent()) {
-                    return userIdCookie.get().getValue();
-                }
+    //             if (userIdCookie.isPresent()) {
+    //                 return userIdCookie.get().getValue();
+    //             }
+    //         }
+    //     }
+        
+    //     return null;
+    // }
+
+    @Override
+public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+
+    if (request != null) {
+        Object userId = request.getAttribute("userId");
+        if (userId != null) {
+            return userId.toString();
+        }
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            Optional<Cookie> userIdCookie = Arrays.stream(cookies)
+                    .filter(cookie -> "userId".equals(cookie.getName()))
+                    .findFirst();
+
+            if (userIdCookie.isPresent()) {
+                return userIdCookie.get().getValue();
             }
         }
-        
-        return null;
     }
+    // 🚨 If user not found, throw exception (returns 400 Bad Request by default)
+    throw new IllegalArgumentException("No authenticated user found in request (attribute/cookie missing)");
+}
+
 } 

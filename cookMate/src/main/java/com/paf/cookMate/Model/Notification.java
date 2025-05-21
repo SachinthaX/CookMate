@@ -11,19 +11,17 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "user_sessions")
-public class UserSession {
-
+@Document(collection = "notifications")
+public class Notification {
+    
     @Id
     private String id;
-
     private String userId;
-
-    private String sessionId;
-
+    private String senderId;
+    private String type;
+    private String message;
+    private String resourceId;
+    private String resourceType;
+    private boolean read;
     private LocalDateTime createdAt;
-
-    private LocalDateTime expiresAt;
-
-    private boolean active = true;
-}
+} 
