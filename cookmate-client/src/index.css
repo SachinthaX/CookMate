@@ -67,10 +67,3 @@ button:focus-visible {
   }
 }
 
-/* Ensure full‐height root for 100vh backgrounds */
-html, body, #root {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
